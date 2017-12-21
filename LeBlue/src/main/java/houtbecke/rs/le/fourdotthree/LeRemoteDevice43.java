@@ -240,13 +240,19 @@ public class LeRemoteDevice43 extends BluetoothGattCallback implements LeRemoteD
 
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 this.gatt = gatt;
-                listeners(
-                        new L() {
-                            @Override
-                            public void l(LeRemoteDeviceListener l) {
-                                l.leDevicesConnected(leDevice43, LeRemoteDevice43.this);
-                            }
-                        });
+                listenerReadWriteLock.readLock().lock();
+                try {
+                    if (listeners.size() > 0) {
+                        for (LeRemoteDeviceListener listener : listeners) {
+                            Log.d("LogManager", "LeRemoteDevice43 line 63: Notify listener");
+                            listener.leDevicesConnected(leDevice43, LeRemoteDevice43.this);
+                        }
+                    } else {
+                        disconnect();
+                    }
+                } finally {
+                    listenerReadWriteLock.readLock().unlock();
+                }
 
 
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
