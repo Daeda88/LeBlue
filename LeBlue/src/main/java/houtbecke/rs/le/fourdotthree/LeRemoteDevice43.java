@@ -59,8 +59,10 @@ public class LeRemoteDevice43 extends BluetoothGattCallback implements LeRemoteD
     private void listeners(L l) {
         listenerReadWriteLock.readLock().lock();
         try {
-            for (LeRemoteDeviceListener listener: listeners)
+            for (LeRemoteDeviceListener listener: listeners) {
+                Log.d("LogManager","LeRemoteDevice43 line 63: Notify listener");
                 l.l(listener);
+            }
         } finally {
             listenerReadWriteLock.readLock().unlock();
         }
@@ -69,6 +71,7 @@ public class LeRemoteDevice43 extends BluetoothGattCallback implements LeRemoteD
 
     @Override
     public void addListener(LeRemoteDeviceListener listener) {
+        Log.d("LogManager","LeRemoteDevice43 line 74: Add listener");
         listenerReadWriteLock.writeLock().lock();
         try
         {
@@ -82,6 +85,7 @@ public class LeRemoteDevice43 extends BluetoothGattCallback implements LeRemoteD
 
     @Override
     public void removeListener(LeRemoteDeviceListener listener) {
+        Log.d("LogManager","LeRemoteDevice43 line 88: Remove listener");
         listenerReadWriteLock.writeLock().lock();
         try
         {
@@ -100,6 +104,7 @@ public class LeRemoteDevice43 extends BluetoothGattCallback implements LeRemoteD
 
     @Override
     public void connect() {
+        Log.d("LogManager","LeRemoteDevice43 line 107:  connect");
         unpair(remoteDevice43);
 
         if (gatt != null) {
@@ -116,6 +121,7 @@ public class LeRemoteDevice43 extends BluetoothGattCallback implements LeRemoteD
 
     @Override
     public void disconnect() {
+        Log.d("LogManager","LeRemoteDevice43 line 124:  disconnect");
         if (gatt != null) {
             gatt.disconnect();
         }
@@ -138,6 +144,7 @@ public class LeRemoteDevice43 extends BluetoothGattCallback implements LeRemoteD
     }
 
     private void unpair(final BluetoothDevice bluetoothDevice){
+        Log.d("LogManager","LeRemoteDevice43 line 147:  unpair");
         // unpair to prevent connection problems
        if (bluetoothDevice.getBondState() != BluetoothDevice.BOND_NONE) {
            try {
@@ -159,6 +166,7 @@ public class LeRemoteDevice43 extends BluetoothGattCallback implements LeRemoteD
 
     @Override
     public void close() {
+        Log.d("LogManager","LeRemoteDevice43 line 169:  close");
         this.queue.clear();
             if (gatt != null)
                 gatt.close();
@@ -184,6 +192,7 @@ public class LeRemoteDevice43 extends BluetoothGattCallback implements LeRemoteD
     }
     @Override
     public void startServicesDiscovery() {
+        Log.d("LogManager","LeRemoteDevice43 line 195:  startServicesDiscovery");
         if (gatt !=null)
             gatt.discoverServices();
     }
@@ -222,6 +231,7 @@ public class LeRemoteDevice43 extends BluetoothGattCallback implements LeRemoteD
     public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
         super.onConnectionStateChange(gatt, status, newState);
 
+        Log.d("LogManager","LeRemoteDevice43 line 234:  connection state change " + newState);
         if (status!=BluetoothGatt.GATT_SUCCESS){
             leDevice43.log(Log.ERROR,"LeBlue","onConnectionStateChange " + status);
         }
@@ -257,6 +267,7 @@ public class LeRemoteDevice43 extends BluetoothGattCallback implements LeRemoteD
     @Override
     public void onServicesDiscovered(BluetoothGatt gatt,final int status) {
         super.onServicesDiscovered(gatt, status);
+        Log.d("LogManager","LeRemoteDevice43 line 270:  services discovered");
 
         if (status!=BluetoothGatt.GATT_SUCCESS){
             leDevice43.log(Log.ERROR,"LeBlue","onServicesDiscovered " + status);
